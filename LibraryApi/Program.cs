@@ -1,25 +1,39 @@
 using LibraryApi.Data;
 using LibraryApi.Models;
 using LibraryApi.Repository;
+using LibraryApi.Repository.Specific;
+using LibraryApi.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add DB context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add controllers
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IRepository<Book>, Repository<Book>>();
-builder.Services.AddScoped<IRepository<Genre>, Repository<Genre>>();
-builder.Services.AddScoped<IRepository<Author>, Repository<Author>>();
+// Register generic repository
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+// Register specific repositories
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+
+// Register services
+builder.Services.AddScoped<IBookService, BookService>();
+//builder.Services.AddScoped<IAuthorService, AuthorService>();
+//builder.Services.AddScoped<IGenreService, GenreService>();
+
+// Swagger setup
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Dev only Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -29,5 +43,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();

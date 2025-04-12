@@ -1,6 +1,8 @@
+using LibraryApi.DTOs;
 using LibraryApi.Models;
 using LibraryApi.Repository;
 using LibraryApi.Repository.Specific;
+using LibraryApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApi.Controllers
@@ -9,44 +11,51 @@ namespace LibraryApi.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IBookRepository _repository;
+        private readonly IBookService _bookService;
 
-        public BookController(IBookRepository repository)
+        public BookController(IBookService bookService)
         {
-            _repository = repository;
+            _bookService = bookService;
         }
 
         [HttpGet]
-        public IActionResult GetBooks() => Ok(_repository.GetAll());
-
-        [HttpGet("{id}")]
-        public IActionResult GetBook(int id)
+        public async Task<IActionResult> GetBooks()
         {
-            var Book = _repository.GetById(id);
-            if (Book == null) return NotFound();
-            return Ok(Book);
+            var books = await _bookService.GetAllBooksAsync();
+            return Ok(books);
         }
 
-        [HttpPost]
-        public IActionResult AddBook([FromBody] Book Book)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBook(int id)
         {
-            _repository.Add(Book);
-            return CreatedAtAction(nameof(GetBook), new { id = Book.Id }, Book);
+            var book = await _bookService.GetBookByIdAsync(id);
+            if (book == null) return NotFound();
+            return Ok(book);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddBook([FromBody] BookCreateDto dto)
+        {
+            var id = await _bookService.CreateBookAsync(dto);
+            return CreatedAtAction(nameof(GetBook), new { id }, dto);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateBook(int id, [FromBody] Book Book)
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] BookUpdateDto dto)
         {
-            if (id != Book.Id) return BadRequest();
-            _repository.Update(Book);
+            if (id != dto.Id) return BadRequest();
+            await _bookService.UpdateBookAsync(dto);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteBook(int id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
-            _repository.Delete(id);
-            return NoContent();
+            var deleted = await _bookService.DeleteBookAsync(id);
+            if (deleted == null) return NotFound();
+            return Ok(deleted);
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LibraryApi.Data;
+using LibraryApi.Models;
 using LibraryApi.Repository;
 using Microsoft.EntityFrameworkCore;
 
