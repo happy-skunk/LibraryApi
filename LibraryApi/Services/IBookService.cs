@@ -1,4 +1,4 @@
-﻿using LibraryApi.DTOs;
+﻿using LibraryApi.DTOs.Book;
 
 namespace LibraryApi.Services
 {

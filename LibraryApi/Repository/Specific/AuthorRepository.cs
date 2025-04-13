@@ -1,7 +1,5 @@
-﻿using LibraryApi.Repository.Specific;
-using LibraryApi.Data;
+﻿using LibraryApi.Data;
 using LibraryApi.Models;
-using LibraryApi.Repository.Specific;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -13,6 +11,20 @@ namespace LibraryApi.Repository.Specific
         public AuthorRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<Author>> GetAllIncludingAsync()
+        {
+            return await _context.Authors
+                .Include(a => a.Books)
+                .ToListAsync();
+        }
+
+        public async Task<Author> GetByIdIncludingAsync(int id)
+        {
+            return await _context.Authors
+                .Include(a => a.Books)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
     }
 }

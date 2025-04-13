@@ -1,4 +1,4 @@
-﻿using LibraryApi.DTOs;
+﻿using LibraryApi.DTOs.Book;
 using LibraryApi.Models;
 using LibraryApi.Repository.Specific;
 using Microsoft.EntityFrameworkCore;

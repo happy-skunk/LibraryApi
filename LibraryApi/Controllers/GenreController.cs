@@ -1,6 +1,8 @@
 ﻿using LibraryApi.Models;
+using LibraryApi.DTOs.Genre;
 using LibraryApi.Repository;
 using LibraryApi.Repository.Specific;
+using LibraryApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApi.Controllers
@@ -9,44 +11,50 @@ namespace LibraryApi.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private readonly IGenreRepository _repository;
+        private readonly IGenreService _GenreService;
 
-        public GenreController(IGenreRepository repository)
+        public GenreController(IGenreService genreService)
         {
-            _repository = repository;
+            _GenreService = genreService;
         }
 
         [HttpGet]
-        public IActionResult GetGenres() => Ok(_repository.GetAll());
+        public async Task<IActionResult> GetGenres()
+        {
+            var genres = await _GenreService.GetAllGenresAsync();
+            return Ok(genres);
+        }
 
         [HttpGet("{id}")]
-        public IActionResult GetGenre(int id)
+
+        public async Task<IActionResult> GetGenre(int id)
         {
-            var Genre = _repository.GetById(id);
-            if (Genre == null) return NotFound();
-            return Ok(Genre);
+            var genre = await _GenreService.GetGenreByIdAsync(id);
+            if (genre == null) return NotFound();
+            return Ok(genre);
         }
 
         [HttpPost]
-        public IActionResult AddGenre([FromBody] Genre Genre)
+        public async Task<IActionResult> AddGenre([FromBody] GenreCreateDto dto)
         {
-            _repository.Add(Genre);
-            return CreatedAtAction(nameof(GetGenre), new { id = Genre.Id }, Genre);
+            var id = await _GenreService.CreateGenreAsync(dto);
+            return CreatedAtAction(nameof(GetGenre), new { id }, dto);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateGenre(int id, [FromBody] Genre Genre)
+        public async Task<IActionResult> UpdateGenre(int id, [FromBody] GenreUpdateDto dto)
         {
-            if (id != Genre.Id) return BadRequest();
-            _repository.Update(Genre);
+            if (id != dto.Id) return BadRequest();
+            await _GenreService.UpdateGenreAsync(dto);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteGenre(int id)
+        public async Task<IActionResult> DeleteGenre(int id)
         {
-            _repository.Delete(id);
-            return NoContent();
+            var deleted = await _GenreService.DeleteGenreAsync(id);
+            if (deleted == null) return NotFound();
+            return Ok(deleted);
         }
     }
 }
