@@ -1,6 +1,7 @@
 ﻿using LibraryApi.Data;
 using LibraryApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace LibraryApi.Repository.Specific
 {
@@ -27,6 +28,20 @@ namespace LibraryApi.Repository.Specific
                 .Include(b => b.Author)
                 .Include(b => b.Genre)
                 .FirstOrDefaultAsync(b => b.Id == id);
+        }
+
+        public async Task<IEnumerable<Book>> GetBooksByAuthorNameAsync(string authorName) 
+        {
+            return await _context.Books
+                .Where(b => b.Author != null && b.Author.Name == authorName)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Book>> GetBooksByGenreNameAsync(string genreName)
+        {
+            return await _context.Books
+                .Where(b => b.Genre != null && b.Genre.Name == genreName)
+                .ToListAsync();
         }
     }
 }

@@ -2,6 +2,7 @@
 using LibraryApi.Models;
 using LibraryApi.Repository.Specific;
 using Microsoft.EntityFrameworkCore;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LibraryApi.Services
 {
@@ -77,6 +78,31 @@ namespace LibraryApi.Services
                 Id = book.Id,
                 Title = book.Title
             };
+        }
+
+        public async Task<IEnumerable<BookViewDto>> GetBooksByAuthorNameAsync(string authorName) 
+        {
+            var books = await _bookRepo.GetBooksByAuthorNameAsync(authorName);
+            if (books == null) return null;
+
+            return books.Select(book => new BookViewDto
+            {
+                Id = book.Id,
+                Title = book.Title,
+                AuthorName = book.Author?.Name,
+            });
+        }
+        public async Task<IEnumerable<BookViewDto>> GetBooksByGenreNameAsync(string genreName)
+        {
+            var books = await _bookRepo.GetBooksByGenreNameAsync(genreName);
+            if (books == null) return null;
+
+            return books.Select(book => new BookViewDto
+            {
+                Id = book.Id,
+                Title = book.Title,
+                GenreName = book.Genre.Name,
+            });
         }
     }
 }

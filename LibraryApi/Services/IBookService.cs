@@ -1,4 +1,5 @@
 ﻿using LibraryApi.DTOs.Book;
+using LibraryApi.Models;
 
 namespace LibraryApi.Services
 {
@@ -9,5 +10,7 @@ namespace LibraryApi.Services
         Task<BookViewDto> GetBookByIdAsync(int id);
         Task UpdateBookAsync(BookUpdateDto dto);
         Task<BookDeleteDto> DeleteBookAsync(int id);
+        Task<IEnumerable<BookViewDto>> GetBooksByAuthorNameAsync(string authorName);
+        Task<IEnumerable<BookViewDto>> GetBooksByGenreNameAsync(string genreName);
     }
 }

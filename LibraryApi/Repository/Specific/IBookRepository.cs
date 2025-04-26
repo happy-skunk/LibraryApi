@@ -6,5 +6,7 @@ namespace LibraryApi.Repository.Specific
     {
         Task<IEnumerable<Book>> GetAllIncludingAsync();
         Task<Book> GetByIdIncludingAsync(int id);
+        Task<IEnumerable<Book>> GetBooksByAuthorNameAsync(string authorName);
+        Task<IEnumerable<Book>> GetBooksByGenreNameAsync(string genreName);
     }
 }
