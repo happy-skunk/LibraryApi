@@ -117,7 +117,7 @@ namespace LibraryApi.Services
             {
                 Id = book.Id,
                 Title = book.Title,
-                Price = book.Price + "₾",
+                Price = book.Price,
             });
         }
     }
