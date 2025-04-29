@@ -44,10 +44,10 @@ namespace LibraryApi.Repository.Specific
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetBooksByPriceRangeAsync(uint Min, uint Max)
+        public async Task<IEnumerable<Book>> GetBooksByPriceRangeAsync(decimal Min, decimal Max)
         {
             return await _context.Books
-                .Where(b => b.Price > Min && b.Price < Max)
+                .Where(b => b.Price >= Min && b.Price <= Max)
                 .ToListAsync();
         }
     }

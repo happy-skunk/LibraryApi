@@ -108,7 +108,7 @@ namespace LibraryApi.Services
                 GenreName = book.Genre.Name,
             });
         }
-        public async Task<IEnumerable<BookViewDto>> GetBooksByPriceRangeAsync(uint Min, uint Max)
+        public async Task<IEnumerable<BookViewDto>> GetBooksByPriceRangeAsync(decimal Min, decimal Max)
         {
             var books = await _bookRepo.GetBooksByPriceRangeAsync(Min, Max);
             if (books == null) return null;

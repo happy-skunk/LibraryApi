@@ -10,8 +10,8 @@ namespace LibraryApi.Models
         public string Title { get; set; }
 
         [Required]
-        [Range(1, uint.MaxValue)]
-        public uint Price { get; set; }
+        [Range(1, UInt64.MaxValue)]
+        public decimal Price { get; set; }
 
         [Required]
         [Range(1, int.MaxValue)]
