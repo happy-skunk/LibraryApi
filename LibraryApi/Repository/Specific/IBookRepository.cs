@@ -8,5 +8,6 @@ namespace LibraryApi.Repository.Specific
         Task<Book> GetByIdIncludingAsync(int id);
         Task<IEnumerable<Book>> GetBooksByAuthorNameAsync(string authorName);
         Task<IEnumerable<Book>> GetBooksByGenreNameAsync(string genreName);
+        Task<IEnumerable<Book>> GetBooksByPriceRangeAsync(uint Min, uint Max);
     }
 }

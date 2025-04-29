@@ -12,5 +12,6 @@ namespace LibraryApi.Services
         Task<BookDeleteDto> DeleteBookAsync(int id);
         Task<IEnumerable<BookViewDto>> GetBooksByAuthorNameAsync(string authorName);
         Task<IEnumerable<BookViewDto>> GetBooksByGenreNameAsync(string genreName);
+        Task<IEnumerable<BookViewDto>> GetBooksByPriceRangeAsync(string Min, string Max);
     }
 }

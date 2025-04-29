@@ -43,5 +43,12 @@ namespace LibraryApi.Repository.Specific
                 .Where(b => b.Genre != null && b.Genre.Name == genreName)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Book>> GetBooksByPriceRangeAsync(uint Min, uint Max)
+        {
+            return await _context.Books
+                .Where(b => b.Price > Min && b.Price < Max)
+                .ToListAsync();
+        }
     }
 }

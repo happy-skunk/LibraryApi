@@ -8,6 +8,11 @@ namespace LibraryApi.Models
         [Required]
         [StringLength(100)]
         public string Title { get; set; }
+
+        [Required]
+        [Range(1, uint.MaxValue)]
+        public uint Price { get; set; }
+
         [Required]
         [Range(1, int.MaxValue)]
         [ForeignKey("Author")]

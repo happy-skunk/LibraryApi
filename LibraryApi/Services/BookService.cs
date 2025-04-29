@@ -20,6 +20,7 @@ namespace LibraryApi.Services
             var book = new Book
             {
                 Title = bookCreateDto.Title,
+                Price = bookCreateDto.Price,
                 AuthorId = bookCreateDto.AuthorId,
                 GenreId = bookCreateDto.GenreId,
             };
@@ -34,6 +35,7 @@ namespace LibraryApi.Services
             {
                 Id = book.Id,
                 Title = book.Title,
+                Price = book.Price,
                 AuthorName = book.Author?.Name,
                 GenreName = book.Genre?.Name
             });
@@ -48,6 +50,7 @@ namespace LibraryApi.Services
             {
                 Id = book.Id,
                 Title = book.Title,
+                Price = book.Price,
                 AuthorName = book.Author?.Name,
                 GenreName = book.Genre?.Name
             };
@@ -59,6 +62,7 @@ namespace LibraryApi.Services
             if (book == null) return;
 
             book.Title = dto.Title;
+            book.Price = dto.Price;
             book.AuthorId = dto.AuthorId;
             book.GenreId = dto.GenreId;
 
@@ -102,6 +106,18 @@ namespace LibraryApi.Services
                 Id = book.Id,
                 Title = book.Title,
                 GenreName = book.Genre.Name,
+            });
+        }
+        public async Task<IEnumerable<BookViewDto>> GetBooksByPriceRangeAsync(uint Min, uint Max)
+        {
+            var books = await _bookRepo.GetBooksByPriceRangeAsync(Min, Max);
+            if (books == null) return null;
+
+            return books.Select(book => new BookViewDto
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Price = book.Price + "₾",
             });
         }
     }

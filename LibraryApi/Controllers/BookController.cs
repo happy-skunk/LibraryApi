@@ -57,7 +57,7 @@ namespace LibraryApi.Controllers
             return Ok(deleted);
         }
 
-        [HttpGet("author/{authorName}")]
+        [HttpGet("{authorName}")]
         public async Task<IActionResult> GetBooksByAuthorNameAsync(string authorName)
         {
             var book = await _bookService.GetBooksByAuthorNameAsync(authorName);
@@ -65,10 +65,17 @@ namespace LibraryApi.Controllers
             return Ok(book);
         }
 
-        [HttpGet("genre/{genreName}")]
+        [HttpGet("{genreName}")]
         public async Task<IActionResult> GetBooksByGenreNameAsync(string genreName)
         {
             var book = await _bookService.GetBooksByGenreNameAsync(genreName);
+            if (book == null) return NotFound();
+            return Ok(book);
+        }
+        [HttpGet("price/{Min, Max}")]
+        public async Task<IActionResult> GetBooksByPriceRangeAsync(uint Min, uint Max)
+        {
+            var book = await _bookService.GetBooksByPriceRangeAsync(Min, Max);
             if (book == null) return NotFound();
             return Ok(book);
         }
