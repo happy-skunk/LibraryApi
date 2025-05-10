@@ -1,3 +1,4 @@
+using LibraryApi.Cashe;
 using LibraryApi.Data;
 using LibraryApi.Models;
 using LibraryApi.Repository;
@@ -21,6 +22,10 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+
+// Register Cache
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheService, CacheService>();
 
 // Register services
 builder.Services.AddScoped<IBookService, BookService>();
